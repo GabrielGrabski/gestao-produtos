@@ -1,7 +1,9 @@
 package com.grabas.gestaoprodutos.modulos.categoria.model;
 
+import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaRequest;
 import com.grabas.gestaoprodutos.modulos.produto.model.Produto;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,7 +18,7 @@ public class Categoria {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "NOME")
@@ -32,4 +34,10 @@ public class Categoria {
             inverseJoinColumns = @JoinColumn(name = "PRODUTO_ID")
     )
     private List<Produto> produtos;
+
+    public static Categoria to(CategoriaRequest request) {
+        var categoria = new Categoria();
+        BeanUtils.copyProperties(request, categoria);
+        return categoria;
+    }
 }
