@@ -17,7 +17,10 @@ public class CategoriaService {
 
     public CategoriaResponse save(CategoriaRequest request) {
         var categoria = repository.save(Categoria.to(request));
-        return new CategoriaResponse(categoria.getId(), categoria.getNome(), categoria.getDescricao());
+        return new CategoriaResponse(categoria.getId(),
+                categoria.getNome(),
+                categoria.getDescricao(),
+                categoria.getProdutos());
     }
 
     public Page<Categoria> findAll(Pageable pageable) {

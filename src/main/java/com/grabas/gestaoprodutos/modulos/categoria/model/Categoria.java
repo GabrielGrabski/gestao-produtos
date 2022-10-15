@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "CATEGORIA")
@@ -28,11 +29,9 @@ public class Categoria {
     private String descricao;
 
     @ManyToMany
-    @JoinTable(
-            name = "PRODUTO_CATEGORIA",
+    @JoinTable(name = "PRODUTO_CATEGORIA",
             joinColumns = @JoinColumn(name = "CATEGORIA_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PRODUTO_ID")
-    )
+            inverseJoinColumns = @JoinColumn(name = "PRODUTO_ID"))
     private List<Produto> produtos;
 
     public static Categoria to(CategoriaRequest request) {
