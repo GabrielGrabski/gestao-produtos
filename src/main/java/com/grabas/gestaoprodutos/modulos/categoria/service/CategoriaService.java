@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class CategoriaService {
 
@@ -23,7 +25,11 @@ public class CategoriaService {
                 categoria.getProdutos());
     }
 
-    public Page<Categoria> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<CategoriaResponse> findAll(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(categoria -> new CategoriaResponse(categoria.getId(),
+                        categoria.getNome(),
+                        categoria.getDescricao(),
+                        categoria.getProdutos()));
     }
 }

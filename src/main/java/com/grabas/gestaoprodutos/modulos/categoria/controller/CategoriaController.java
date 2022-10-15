@@ -2,7 +2,6 @@ package com.grabas.gestaoprodutos.modulos.categoria.controller;
 
 import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaRequest;
 import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaResponse;
-import com.grabas.gestaoprodutos.modulos.categoria.model.Categoria;
 import com.grabas.gestaoprodutos.modulos.categoria.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +16,7 @@ public class CategoriaController {
     private CategoriaService service;
 
     @GetMapping
-    public Page<Categoria> findAll(Pageable pageable) {
+    public Page<CategoriaResponse> findAll(Pageable pageable) {
         return service.findAll(pageable);
     }
 

@@ -1,4 +1,6 @@
 package com.grabas.gestaoprodutos.modulos.categoria.dto;
 
-public record CategoriaRequest(String nome, String descricao) {
+import javax.validation.constraints.NotNull;
+
+public record CategoriaRequest(@NotNull String nome, String descricao) {
 }
