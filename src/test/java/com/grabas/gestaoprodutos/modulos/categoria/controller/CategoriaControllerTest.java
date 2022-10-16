@@ -48,4 +48,16 @@ public class CategoriaControllerTest {
 
         verify(service, times(1)).save(any(CategoriaRequest.class));
     }
+
+    @Test
+    @SneakyThrows
+    public void save_deveRetornarEx_quandoRequestIncorreto() {
+        mvc.perform(post("/categorias")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(umaCategoria())))
+                .andExpect(status().isOk());
+
+        verify(service, times(1)).save(any(CategoriaRequest.class));
+    }
 }
