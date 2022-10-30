@@ -1,8 +1,11 @@
 package com.grabas.gestaoprodutos.utils;
 
+import com.grabas.gestaoprodutos.comum.enums.EStatus;
 import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaRequest;
-import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaResponse;
+import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaSemProdutosResponse;
 import com.grabas.gestaoprodutos.modulos.categoria.model.Categoria;
+import com.grabas.gestaoprodutos.modulos.produto.dto.ProdutoResponse;
+import com.grabas.gestaoprodutos.modulos.produto.dto.ProdutoSemCategoriaResponse;
 import com.grabas.gestaoprodutos.modulos.produto.model.Produto;
 
 import java.util.List;
@@ -13,6 +16,7 @@ public class TestUtils {
         return Categoria.builder()
                 .id(1)
                 .nome("Categoria Teste")
+                .status(EStatus.A)
                 .descricao("Descrição Teste")
                 .build();
     }
@@ -21,11 +25,44 @@ public class TestUtils {
         return new CategoriaRequest(categoria.getNome(), categoria.getDescricao());
     }
 
-    public static CategoriaResponse umaCategoriaResponse(Categoria categoria) {
-        return new CategoriaResponse(categoria.getId(),
+    public static Categoria umaCategoriaSemNome() {
+        return Categoria.builder()
+                .id(1)
+                .nome(null)
+                .status(EStatus.A)
+                .descricao("Descrição Teste")
+                .build();
+    }
+
+    public static CategoriaRequest umaCategoriaRequestSemNome(Categoria categoria) {
+        return new CategoriaRequest(null, categoria.getDescricao());
+    }
+
+    public static ProdutoSemCategoriaResponse umProdutoSemCategoriaResponse(Produto produto) {
+        return new ProdutoSemCategoriaResponse(
+                produto.getId(),
+                produto.getNome(),
+                produto.getStatus(),
+                produto.getDescricao()
+        );
+    }
+
+    public static CategoriaSemProdutosResponse umaCategoriaSemProdutosResponse(Categoria categoria) {
+        return new CategoriaSemProdutosResponse(
+                null,
                 categoria.getNome(),
-                categoria.getDescricao(),
-                categoria.getProdutos());
+                categoria.getStatus(),
+                categoria.getDescricao());
+    }
+
+    public static ProdutoResponse umProdutoResponse(Produto produto) {
+        return new ProdutoResponse(
+                produto.getId(),
+                produto.getNome(),
+                produto.getDescricao(),
+                produto.getStatus(),
+                List.of(umaCategoriaSemProdutosResponse(umaCategoria()))
+        );
     }
 
     public static Produto umProduto() {

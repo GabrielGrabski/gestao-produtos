@@ -1,5 +1,6 @@
 package com.grabas.gestaoprodutos.modulos.categoria.model;
 
+import com.grabas.gestaoprodutos.comum.enums.EStatus;
 import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaRequest;
 import com.grabas.gestaoprodutos.modulos.produto.model.Produto;
 import lombok.*;
@@ -12,7 +13,6 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "CATEGORIA")
 public class Categoria {
@@ -25,6 +25,10 @@ public class Categoria {
     @Column(name = "NOME")
     private String nome;
 
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    private EStatus status;
+
     @Column(name = "DESCRICAO")
     private String descricao;
 
@@ -33,6 +37,10 @@ public class Categoria {
             joinColumns = @JoinColumn(name = "CATEGORIA_ID"),
             inverseJoinColumns = @JoinColumn(name = "PRODUTO_ID"))
     private List<Produto> produtos;
+
+    public Categoria() {
+        produtos = List.of();
+    }
 
     public static Categoria to(CategoriaRequest request) {
         var categoria = new Categoria();
