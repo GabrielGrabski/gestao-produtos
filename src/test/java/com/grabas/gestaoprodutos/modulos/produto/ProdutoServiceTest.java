@@ -31,11 +31,14 @@ public class ProdutoServiceTest {
 
     @Test
     public void findAll_deveRetornarTodosProdutos_quandoHouver() {
-        when(repository.findAll(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(umProduto())));
+        var produto = umProduto();
+        produto.getCategorias().forEach(categoria -> categoria.setId(null));
 
-        assertThat(service.findAll(PageRequest.of(0, 10)))
-                .isEqualTo(new PageImpl<>(List.of(umProdutoResponse(umProduto()))));
+        when(repository.findAll(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(produto)));
+
+        assertThat(service.findAll(PageRequest.of(0, 10)).getContent())
+                .isEqualTo(new PageImpl<>(List.of(umProdutoResponse(produto))).getContent());
     }
 
     @Test

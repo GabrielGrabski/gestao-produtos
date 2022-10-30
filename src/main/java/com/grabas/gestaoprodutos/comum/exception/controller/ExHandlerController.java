@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExHandlerController {
 
-    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ValidacaoException.class)
     public List<ExResponse> getErrorMessage(ValidacaoException ex) {
         return List.of(new ExResponse(ex.getMessage()));
@@ -29,7 +29,7 @@ public class ExHandlerController {
 
         ex.getBindingResult()
                 .getAllErrors()
-                .forEach(error -> errors.add(new ExResponse(error.toString())));
+                .forEach(error -> errors.add(new ExResponse(error.getDefaultMessage())));
 
         return errors;
     }
