@@ -62,10 +62,7 @@ public class CategoriaService {
         var categoria = Categoria.to(request);
         repository.save(setAtivoSeNovaCategoria(categoria));
 
-        return new CategoriaSemProdutosResponse(categoria.getId(),
-                categoria.getNome(),
-                categoria.getStatus(),
-                categoria.getDescricao());
+        return toCategoriaSemProdutosResponse(categoria);
     }
 
     private Categoria setAtivoSeNovaCategoria(Categoria categoria) {
@@ -77,19 +74,6 @@ public class CategoriaService {
 
     public Page<CategoriaSemProdutosResponse> findAll(Pageable pageable) {
         return repository.findAllByStatus(pageable, EStatus.A)
-                .map(categoria -> new CategoriaSemProdutosResponse(categoria.getId(),
-                        categoria.getNome(),
-                        categoria.getStatus(),
-                        categoria.getDescricao()));
-    }
-
-    private List<ProdutoSemCategoriaResponse> getProdutoSemCategoria(List<Produto> produtos) {
-        return produtos.stream()
-                .map(produto -> new ProdutoSemCategoriaResponse(
-                        produto.getId(),
-                        produto.getNome(),
-                        produto.getStatus(),
-                        produto.getDescricao()))
-                .collect(Collectors.toList());
+                .map(this::toCategoriaSemProdutosResponse);
     }
 }
