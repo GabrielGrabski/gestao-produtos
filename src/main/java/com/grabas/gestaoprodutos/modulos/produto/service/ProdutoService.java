@@ -59,7 +59,7 @@ public class ProdutoService {
 
     public ProdutoResponse save(ProdutoRequest request) {
         var categorias = categoriaRepository.findAllByStatusAndIdIn(EStatus.A, request.categoriasIds());
-        validarCategoria(categorias);
+        validarCategorias(categorias);
         var produto = Produto.to(request, categorias);
         repository.save(setAtivoSeNovoProduto(produto));
         saveCategorias(categorias, produto);
@@ -72,7 +72,7 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    private void validarCategoria(List<Categoria> categorias) {
+    private void validarCategorias(List<Categoria> categorias) {
         validarCategoriaVazia(categorias);
     }
 
