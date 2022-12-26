@@ -26,22 +26,30 @@ public class CategoriaService {
     private CategoriaRepository repository;
 
     public CategoriaSemProdutosResponse alterarSituacao(Integer id) {
-        var categoria = repository.findById(id)
-                .orElseThrow(() -> new ValidacaoException(CATEGORIA_NAO_ENCONTRADA.getDescricao()));
+        var categoria = getCategoriaById(id);
+        setStatus(categoria);
+        repository.save(categoria);
+        return toCategoriaSemProdutosResponse(categoria);
+    }
 
+    private CategoriaSemProdutosResponse toCategoriaSemProdutosResponse(Categoria categoria) {
+        return new CategoriaSemProdutosResponse(categoria.getId(),
+                categoria.getNome(),
+                categoria.getStatus(),
+                categoria.getDescricao());
+    }
+
+    private Categoria getCategoriaById(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new ValidacaoException(CATEGORIA_NAO_ENCONTRADA.getDescricao()));
+    }
+
+    private void setStatus(Categoria categoria) {
         if (categoria.getStatus().equals(EStatus.A)) {
             categoria.setStatus(EStatus.I);
             validarInativacaoCategoria(categoria);
         } else {
             categoria.setStatus(EStatus.A);
         }
-
-        repository.save(categoria);
-
-        return new CategoriaSemProdutosResponse(categoria.getId(),
-                categoria.getNome(),
-                categoria.getStatus(),
-                categoria.getDescricao());
     }
 
     private void validarInativacaoCategoria(Categoria categoria) {

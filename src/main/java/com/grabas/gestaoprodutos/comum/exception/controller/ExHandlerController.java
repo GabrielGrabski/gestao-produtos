@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExHandlerController {
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ValidacaoException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public List<ExResponse> getErrorMessage(ValidacaoException ex) {
         return List.of(new ExResponse(ex.getMessage()));
     }
