@@ -73,6 +73,10 @@ public class ProdutoService {
     }
 
     private void validarCategoria(List<Categoria> categorias) {
+        validarCategoriaVazia(categorias);
+    }
+
+    private void validarCategoriaVazia(List<Categoria> categorias) {
         if (categorias.isEmpty()) {
             throw new ValidacaoException(CATEGORIA_NAO_ENCONTRADA.getDescricao());
         }
