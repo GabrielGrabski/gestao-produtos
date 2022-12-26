@@ -32,7 +32,7 @@ public class CategoriaService {
         return toCategoriaSemProdutosResponse(categoria);
     }
 
-    private CategoriaSemProdutosResponse toCategoriaSemProdutosResponse(Categoria categoria) {
+    public CategoriaSemProdutosResponse toCategoriaSemProdutosResponse(Categoria categoria) {
         return new CategoriaSemProdutosResponse(categoria.getId(),
                 categoria.getNome(),
                 categoria.getStatus(),

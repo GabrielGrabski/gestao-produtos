@@ -5,6 +5,7 @@ import com.grabas.gestaoprodutos.comum.exception.model.ValidacaoException;
 import com.grabas.gestaoprodutos.modulos.categoria.dto.CategoriaSemProdutosResponse;
 import com.grabas.gestaoprodutos.modulos.categoria.model.Categoria;
 import com.grabas.gestaoprodutos.modulos.categoria.repository.CategoriaRepository;
+import com.grabas.gestaoprodutos.modulos.categoria.service.CategoriaService;
 import com.grabas.gestaoprodutos.modulos.produto.dto.ProdutoRequest;
 import com.grabas.gestaoprodutos.modulos.produto.dto.ProdutoResponse;
 import com.grabas.gestaoprodutos.modulos.produto.model.Produto;
@@ -25,17 +26,21 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
     @Autowired
+    private CategoriaService categoriaService;
+    @Autowired
     private CategoriaRepository categoriaRepository;
 
     public Page<ProdutoResponse> findAll(Pageable pageable) {
-        return repository.findAll(pageable)
-                .map(produto -> new ProdutoResponse(
-                        produto.getId(),
-                        produto.getNome(),
-                        produto.getDescricao(),
-                        produto.getStatus(),
-                        getCategoriasResponse(produto.getCategorias())
-                ));
+        return repository.findAll(pageable).map(this::toProdutoResponse);
+    }
+
+    private ProdutoResponse toProdutoResponse(Produto produto) {
+        return new ProdutoResponse(
+                produto.getId(),
+                produto.getNome(),
+                produto.getDescricao(),
+                produto.getStatus(),
+                getCategoriasResponse(produto.getCategorias()));
     }
 
     public void saveCategorias(List<Categoria> categorias, Produto produto) {
@@ -58,21 +63,12 @@ public class ProdutoService {
         var produto = Produto.to(request, categorias);
         repository.save(setAtivoSeNovoProduto(produto));
         saveCategorias(categorias, produto);
-        return new ProdutoResponse(
-                produto.getId(),
-                produto.getNome(),
-                produto.getDescricao(),
-                produto.getStatus(),
-                getCategoriasResponse(produto.getCategorias()));
+        return toProdutoResponse(produto);
     }
 
     private List<CategoriaSemProdutosResponse> getCategoriasResponse(List<Categoria> categorias) {
         return categorias.stream()
-                .map(categoria -> new CategoriaSemProdutosResponse(
-                        categoria.getId(),
-                        categoria.getNome(),
-                        categoria.getStatus(),
-                        categoria.getDescricao()))
+                .map(categoriaService::toCategoriaSemProdutosResponse)
                 .collect(Collectors.toList());
     }
 
